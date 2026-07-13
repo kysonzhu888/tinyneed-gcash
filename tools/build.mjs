@@ -9,6 +9,7 @@ const deploy = new URL("../.deploy/", import.meta.url);
 //    functions/ 必须包含——Cloudflare 会把它编译成 Pages Functions（API），漏了会抹掉线上接口。
 const include = [
   "index.html",
+  "404.html",
   "styles.css",
   "script.js",
   "robots.txt",

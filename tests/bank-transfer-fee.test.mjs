@@ -4,6 +4,7 @@ import vm from "node:vm";
 
 const scriptSource = await readFile(new URL("../script.js", import.meta.url), "utf8");
 const homeSource = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const notFoundSource = await readFile(new URL("../404.html", import.meta.url), "utf8");
 const pureLogicSource = scriptSource.split("function readValues()", 1)[0];
 const context = {
   document: { getElementById: () => ({}) },
@@ -19,5 +20,7 @@ assert.equal(context.result.fee, 10);
 assert.equal(context.result.totalToPay, 10010);
 assert.match(context.result.insight, /PHP 10 per bank transfer/);
 assert.match(homeSource, /Fee rules last checked: July 13, 2026/);
+assert.match(notFoundSource, /<meta name="robots" content="noindex,follow">/);
+assert.match(notFoundSource, /Page not found/);
 
 console.log("bank transfer fee regression passed");
