@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en-PH">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GCash Fee Calculator Philippines - TinyNeed</title>
+    <meta name="description" content="Estimate GCash cash-in, cash-out, bank transfer, PayPal, GPO, and load fees in the Philippines. Free, fast, no login.">
+    <meta property="og:title" content="GCash Fee Calculator Philippines">
+    <meta property="og:description" content="Check GCash fees before you cash in, cash out, transfer, or buy load.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gcash.tinyneed.com/">
+    <meta name="theme-color" content="#1155cc">
+    <meta name="google-adsense-account" content="ca-pub-7896672979027584">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7896672979027584" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="GCash Fee Calculator home">
+        <span class="brand-mark">Tn</span>
+        <span>TinyNeed</span>
+      </a>
+      <nav class="topnav" aria-label="Site links">
+        <a href="#calculator">Calculator</a>
+        <a href="#rules">Fee rules</a>
+        <a href="/privacy/">Privacy</a>
+      </nav>
+    </header>
+
+    <main class="app-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">For GCash users in the Philippines</p>
+          <h1>GCash Fee Calculator</h1>
+          <p class="hero-text">Estimate the fee before you cash in, cash out, transfer money, use PayPal, or buy load. No login, no account details, just the amount and method.</p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#calculator">Check a fee</a>
+            <a class="secondary-link" href="#rules">View fee rules</a>
+          </div>
+        </div>
+        <div class="receipt-preview" aria-hidden="true">
+          <div class="receipt-top">
+            <span>GCash estimate</span>
+            <strong id="heroPreviewFee">PHP 40.00</strong>
+          </div>
+          <div class="receipt-line"><span>Amount</span><strong>PHP 10,000</strong></div>
+          <div class="receipt-line"><span>Method</span><strong>OTC cash in</strong></div>
+          <div class="receipt-line accent"><span>Free limit used</span><strong>PHP 6,000</strong></div>
+          <div class="receipt-bar"><span></span></div>
+        </div>
+      </section>
+
+      <section class="tool-grid" id="calculator">
+        <form class="calculator" autocomplete="off">
+          <div class="section-title">
+            <h2>Enter transaction details</h2>
+            <button class="ghost-button" type="button" id="resetButton">Reset</button>
+          </div>
+
+          <div class="field-row">
+            <label>
+              Transaction type
+              <select id="transactionType" name="transactionType">
+                <option value="offlineCashIn">Offline cash in</option>
+                <option value="onlineCashIn">Online cash in</option>
+                <option value="cashOut">Cash out</option>
+                <option value="bankTransfer">Bank transfer</option>
+                <option value="sendMoney">Send money</option>
+                <option value="paypal">PayPal / Payoneer cash in</option>
+                <option value="gpo">GCash Pera Outlet</option>
+                <option value="buyLoad">Buy load</option>
+              </select>
+            </label>
+            <label>
+              Method
+              <select id="method" name="method"></select>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label>
+              Amount
+              <div class="money-input">
+                <span>PHP</span>
+                <input id="amount" name="amount" inputmode="decimal" type="text" value="10000">
+              </div>
+            </label>
+            <label id="otcUsedField">
+              OTC cash-in used this month
+              <div class="money-input">
+                <span>PHP</span>
+                <input id="monthlyOtcUsed" name="monthlyOtcUsed" inputmode="decimal" type="text" value="6000">
+              </div>
+            </label>
+          </div>
+
+          <div class="field-row compact-row">
+            <label id="customFeeField">
+              Custom bank fee
+              <div class="money-input">
+                <span>PHP</span>
+                <input id="customFee" name="customFee" inputmode="decimal" type="text" value="15">
+              </div>
+            </label>
+            <label id="sendLimitField" class="toggle-card">
+              <input id="pastSendLimit" name="pastSendLimit" type="checkbox">
+              <span>
+                <strong>Past monthly free limit</strong>
+                <small>Use this for select power users after 500 sends/receives.</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="source-note">
+            <strong>Data source:</strong>
+            GCash fees page and GCash Help Center. Fee rules last checked: July 13, 2026. Fees can change, so confirm the final amount in the GCash app. This is an estimate, not a payment screen.
+          </div>
+        </form>
+
+        <aside class="results" aria-live="polite">
+          <div class="section-title">
+            <h2>Fee estimate</h2>
+            <span class="status-pill" id="statusPill">Ready</span>
+          </div>
+
+          <div class="big-number">
+            <span>Estimated fee</span>
+            <strong id="feeAmount">PHP 40.00</strong>
+          </div>
+
+          <div class="metric-list">
+            <div>
+              <span>Total to prepare</span>
+              <strong id="totalToPay">PHP 10,040.00</strong>
+            </div>
+            <div>
+              <span>Amount received</span>
+              <strong id="amountReceived">PHP 10,000.00</strong>
+            </div>
+            <div>
+              <span>Free limit left</span>
+              <strong id="freeLimitLeft">PHP 0.00</strong>
+            </div>
+            <div>
+              <span>Effective rate</span>
+              <strong id="effectiveRate">0.40%</strong>
+            </div>
+          </div>
+
+          <div class="insight" id="insightBox">Only the amount above your monthly PHP 8,000 OTC free limit is charged 2%.</div>
+
+          <div class="share-row">
+            <button class="secondary-button" type="button" id="copySummary">Copy summary</button>
+            <a class="messenger-button" id="shareLink" href="#" rel="noopener">Share</a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="compare-section">
+        <div class="section-title">
+          <h2>Quick comparison for this amount</h2>
+          <button class="ghost-button" type="button" id="refreshCompare">Refresh</button>
+        </div>
+        <div class="compare-grid" id="compareGrid"></div>
+      </section>
+
+      <section class="rules-section" id="rules">
+        <h2>Fee rules used in this calculator</h2>
+        <div class="rules-grid">
+          <article>
+            <strong>Offline cash in</strong>
+            <p>First PHP 8,000 per calendar month is free. The amount above that limit is charged 2%.</p>
+          </article>
+          <article>
+            <strong>Bank transfer</strong>
+            <p>GCash lists PHP 10 per bank transfer, effective July 4, 2026, with a PHP 50,000 max per transaction.</p>
+          </article>
+          <article>
+            <strong>Cash out</strong>
+            <p>RCBC Scan to Withdraw is PHP 18. Other partners are estimated at 2% of the amount.</p>
+          </article>
+          <article>
+            <strong>PayPal / Payoneer</strong>
+            <p>PayPal cash in is calculated at 1%. Payoneer is listed as free.</p>
+          </article>
+          <article>
+            <strong>Send money</strong>
+            <p>GCash lists no fee for the first 500 sends and receives per month, then PHP 5 for select power users.</p>
+          </article>
+          <article>
+            <strong>Buy load</strong>
+            <p>Globe and Smart have small fixed fees by load amount. DITO is listed as free.</p>
+          </article>
+        </div>
+        <p class="official-links">
+          Official references:
+          <a href="https://gcash.com/terms-and-conditions/fees" rel="noopener">GCash Services Fees</a>
+          <span aria-hidden="true">|</span>
+          <a href="https://help.gcash.com/hc/en-us/articles/360017595774-Cash-in-fees" rel="noopener">GCash Cash In fees</a>
+        </p>
+      </section>
+
+      <section class="comment-section" id="comments" data-comment-section data-page-slug="home">
+        <div class="comment-head">
+          <div>
+            <p class="eyebrow">Feedback</p>
+            <h2>Reader comments</h2>
+          </div>
+          <span data-comment-count>Loading comments</span>
+        </div>
+        <form class="comment-form" data-comment-form>
+          <div class="comment-hp" aria-hidden="true" style="position:absolute;width:1px;height:1px;overflow:hidden;left:-9999px;top:-9999px;">
+            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+          <label>
+            <span>Name</span>
+            <input name="name" type="text" maxlength="40" placeholder="Reader" autocomplete="name">
+          </label>
+          <label>
+            <span>Comment</span>
+            <textarea name="comment" maxlength="600" rows="3" placeholder="Share a fee rule correction or missing method..." required></textarea>
+          </label>
+          <div class="comment-actions">
+            <p class="comment-status" data-comment-status role="status"></p>
+            <button type="submit" data-comment-submit>Post</button>
+          </div>
+        </form>
+        <div class="comment-list" data-comment-list></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>TinyNeed</span>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a href="/privacy/">Privacy</a>
+    </footer>
+
+    <script src="/script.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+name = "tinyneed-gcash"
+pages_build_output_dir = ".deploy"
+compatibility_date = "2026-07-01"
+
+[vars]
+COMMENT_SITE_NAME = "GCash Fee Calculator"
+COMMENT_PAGE_PATH = "/"
+
+[[d1_databases]]
+binding = "COMMENTS_DB"
+database_name = "tinyneed-gcash-comments"
+database_id = "4107451a-f83a-4ed7-9a58-1a20838c2f3d"
