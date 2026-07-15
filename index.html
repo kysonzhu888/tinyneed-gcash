@@ -79,7 +79,7 @@
 
           <div class="field-row">
             <label>
-              Amount
+              <span id="amountLabel">Amount</span>
               <div class="money-input">
                 <span>PHP</span>
                 <input id="amount" name="amount" inputmode="decimal" type="text" value="10000">
@@ -130,11 +130,11 @@
 
           <div class="metric-list">
             <div>
-              <span>Total to prepare</span>
+              <span id="totalToPayLabel">Total to prepare</span>
               <strong id="totalToPay">PHP 10,040.00</strong>
             </div>
             <div>
-              <span>Amount received</span>
+              <span id="amountReceivedLabel">Amount received</span>
               <strong id="amountReceived">PHP 10,000.00</strong>
             </div>
             <div>
@@ -177,7 +177,7 @@
           </article>
           <article>
             <strong>Cash out</strong>
-            <p>RCBC Scan to Withdraw is PHP 18. Other partners are estimated at 2% of the amount.</p>
+            <p>The entered cash-out amount is what you receive. GCash deducts that amount plus the PHP 18 RCBC fee or the estimated 2% partner fee from your wallet.</p>
           </article>
           <article>
             <strong>PayPal / Payoneer</strong>
@@ -197,6 +197,8 @@
           <a href="https://gcash.com/terms-and-conditions/fees" rel="noopener">GCash Services Fees</a>
           <span aria-hidden="true">|</span>
           <a href="https://help.gcash.com/hc/en-us/articles/360017595774-Cash-in-fees" rel="noopener">GCash Cash In fees</a>
+          <span aria-hidden="true">|</span>
+          <a href="https://help.gcash.com/hc/en-us/articles/51408143354521-How-to-cash-out-through-a-GPO" rel="noopener">GCash GPO Cash Out guide</a>
         </p>
       </section>
 

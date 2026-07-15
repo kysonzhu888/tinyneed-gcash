@@ -46,6 +46,7 @@ const elements = Object.fromEntries(
   [
     "transactionType",
     "method",
+    "amountLabel",
     "amount",
     "monthlyOtcUsed",
     "customFee",
@@ -54,7 +55,9 @@ const elements = Object.fromEntries(
     "customFeeField",
     "sendLimitField",
     "feeAmount",
+    "totalToPayLabel",
     "totalToPay",
+    "amountReceivedLabel",
     "amountReceived",
     "freeLimitLeft",
     "effectiveRate",
@@ -91,6 +94,21 @@ function getLoadFee(method, amount) {
   if (method === "globe") return amount < 99 ? 1 : 2;
   if (method === "smart") return amount < 99 ? 2 : 3;
   return 0;
+}
+
+function getAmountLabels(type, method) {
+  const isCashOut = type === "cashOut" || (type === "gpo" && method === "gpoCashOut");
+  return isCashOut
+    ? {
+        amount: "Cash amount to receive",
+        totalToPay: "Wallet debit",
+        received: "Cash received"
+      }
+    : {
+        amount: "Amount",
+        totalToPay: "Total to prepare",
+        received: "Amount received"
+      };
 }
 
 function calculateFee(type, method, amount, monthlyOtcUsed, customFee, pastSendLimit) {
@@ -142,11 +160,11 @@ function calculateFee(type, method, amount, monthlyOtcUsed, customFee, pastSendL
 
   if (type === "cashOut") {
     result.fee = method === "rcbc" ? 18 : amount * 0.02;
-    result.received = amount - result.fee;
+    result.totalToPay = amount + result.fee;
     result.label = "Cash out";
     result.insight = method === "rcbc"
-      ? "RCBC Scan to Withdraw is listed as a fixed PHP 18 per transaction."
-      : "Other cash-out partners are estimated at 2% of the transaction amount.";
+      ? "You receive the entered cash amount; GCash deducts that amount plus the fixed PHP 18 RCBC fee."
+      : "You receive the entered cash amount; GCash deducts that amount plus the estimated 2% partner fee.";
   }
 
   if (type === "bankTransfer") {
@@ -178,12 +196,11 @@ function calculateFee(type, method, amount, monthlyOtcUsed, customFee, pastSendL
 
   if (type === "gpo") {
     result.fee = method === "gpoCashIn" ? amount * 0.01 : amount * 0.02;
-    result.totalToPay = method === "gpoCashIn" ? amount + result.fee : amount;
-    result.received = method === "gpoCashOut" ? amount - result.fee : amount;
+    result.totalToPay = amount + result.fee;
     result.label = method === "gpoCashIn" ? "GPO pa-cash in" : "GPO pa-cash out";
     result.insight = method === "gpoCashIn"
       ? "GCash lists GPO pa-cash in at 1% of the transaction amount."
-      : "GCash lists GPO pa-cash out at 2% of the transaction amount.";
+      : "You receive the entered cash amount; the suggested 2% GPO fee is added to the wallet debit. Final outlet fees may vary.";
   }
 
   if (type === "buyLoad") {
@@ -243,9 +260,13 @@ function updateResults() {
     values.pastSendLimit
   );
 
+  const amountLabels = getAmountLabels(values.type, values.method);
   const effectiveRate = values.amount > 0 ? (result.fee / values.amount) * 100 : 0;
+  elements.amountLabel.textContent = amountLabels.amount;
   elements.feeAmount.textContent = peso.format(result.fee);
+  elements.totalToPayLabel.textContent = amountLabels.totalToPay;
   elements.totalToPay.textContent = peso.format(result.totalToPay);
+  elements.amountReceivedLabel.textContent = amountLabels.received;
   elements.amountReceived.textContent = peso.format(result.received);
   elements.freeLimitLeft.textContent = result.freeLimitLeft === null ? "Not applicable" : peso.format(result.freeLimitLeft);
   elements.effectiveRate.textContent = formatPercent(effectiveRate);
@@ -262,11 +283,12 @@ function updateResults() {
 }
 
 function buildSummary(values, result) {
+  const amountLabels = getAmountLabels(values.type, values.method);
   return [
     "GCash Fee Calculator - TinyNeed",
     `${result.label}: ${peso.format(values.amount)}`,
     `Estimated fee: ${peso.format(result.fee)}`,
-    `Total to prepare: ${peso.format(result.totalToPay)}`,
+    `${amountLabels.totalToPay}: ${peso.format(result.totalToPay)}`,
     "https://gcash.tinyneed.com/"
   ].join("\n");
 }
