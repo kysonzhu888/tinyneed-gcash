@@ -7,6 +7,7 @@ const peso = new Intl.NumberFormat("en-PH", {
 
 const numberFields = ["amount", "monthlyOtcUsed", "customFee"];
 const BANK_TRANSFER_FEE_PHP = 10;
+const BANK_TRANSFER_MAX_PHP = 50000;
 
 const methodOptions = {
   offlineCashIn: [
@@ -168,10 +169,11 @@ function calculateFee(type, method, amount, monthlyOtcUsed, customFee, pastSendL
   }
 
   if (type === "bankTransfer") {
-    result.fee = BANK_TRANSFER_FEE_PHP;
+    const requiredTransfers = Math.ceil(amount / BANK_TRANSFER_MAX_PHP);
+    result.fee = BANK_TRANSFER_FEE_PHP * requiredTransfers;
     result.totalToPay = amount + result.fee;
     result.label = "Bank transfer";
-    result.insight = `GCash lists PHP ${BANK_TRANSFER_FEE_PHP} per bank transfer, effective July 4, 2026. The listed max is PHP 50,000 per transaction.`;
+    result.insight = `GCash lists PHP ${BANK_TRANSFER_FEE_PHP} per bank transfer, effective July 4, 2026. This amount requires ${requiredTransfers} ${requiredTransfers === 1 ? "transfer" : "transfers"}; the listed max is PHP 50,000 per transaction.`;
   }
 
   if (type === "sendMoney") {
